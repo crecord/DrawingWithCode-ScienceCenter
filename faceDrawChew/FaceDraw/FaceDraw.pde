@@ -18,6 +18,8 @@ float faceY;
 float faceSize;
 float lastFaceX;
 float lastFaceY; 
+float mouthHeight;
+float mouthWidth;
 
 void setup() {
   // the size of our paper
@@ -29,6 +31,10 @@ void setup() {
   // these are the variables we want to know from the face tracker
   oscP5.plug(this, "found", "/found");
   oscP5.plug(this, "poseOrientation", "/pose/orientation");
+  
+  oscP5.plug(this, "mouthWidthReceived", "/gesture/mouth/width");
+  oscP5.plug(this, "mouthHeightReceived", "/gesture/mouth/height");
+  
   // this initializes the variable that will understand the orientation
   poseOrientation = new PVector();
   //this sets the background to white.
@@ -60,21 +66,21 @@ void draw() {
     // this fills the circle with a orange coloe
     //fill(255,176,38); 
     // draw the circle
-   // ellipse(faceX, faceY, faceSize, faceSize);
+    //noStroke(); 
+    //ellipse(faceX, faceY, faceSize, faceSize);
     
     
     // this draws with a continuous line. 
     
-    /*
-    faceSize = map(faceSize,20, 30, 2, 10 );
-    faceSize = constrain(faceSize, 0, 13);
-    strokeWeight(faceSize);
-    stroke(255,176,38); 
-    line(lastFaceX, lastFaceY, faceX, faceY);
-    */
+    
+    //faceSize = map(faceSize,20, 30, 2, 10 );
+    //faceSize = constrain(faceSize, 0, 13);
+    //strokeWeight(faceSize);
+    //stroke(255,176,38); 
+    //line(lastFaceX, lastFaceY, faceX, faceY);
+    
     
     // this draws with a crazy ball of fire. 
-    
     stamp(faceX, faceY, faceSize, faceSize);
     
    
@@ -98,6 +104,7 @@ void keyPressed() {
  }
  else if (key == 'c'){
    // clear the screen by drawing a white rectangle.
+   noStroke();
    fill(255);
   rect(0,0,width,height);
  }
@@ -120,8 +127,8 @@ public void poseOrientation(float x, float y, float z) {
  
 void stamp(float x, float y, float wd, float ht)
 {
-  wd *=2;
-  ht *=2; 
+  wd *=4;
+  ht *=4; 
   float transp =90;
   for (float i=3; i<random(5,50); i=i+random(1,10)) {
     //arc
@@ -143,4 +150,14 @@ void stamp(float x, float y, float wd, float ht)
     arc(x, y, random(wd/2-(wd/2-2), wd/2), random(ht/2-(ht/2-2), ht/2), TWO_PI-PI/2, TWO_PI);
   }
 }
-  
+
+
+public void mouthWidthReceived(float w) {
+  //println("mouth Width: " + w);
+  mouthWidth = w;
+}
+
+public void mouthHeightReceived(float h) {
+  //println("mouth height: " + h);
+  mouthHeight = h;
+}
